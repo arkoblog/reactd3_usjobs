@@ -3,6 +3,8 @@ var ReactDOM = require('react-dom');
 var _ = require('lodash');
 var d3 = require('d3');
 var drawers = require('./components/drawers');
+require("./styles.css");
+
 
 var H1BGraph = React.createClass({
 	componentWillMount: function(){
@@ -77,7 +79,7 @@ var H1BGraph = React.createClass({
 				</div>
 			);
 	}
-}) 
+}); 
 
 ReactDOM.render(
 	<H1BGraph url="data/h1bs.csv" />,

@@ -23,8 +23,8 @@ module.exports = {
       loader: 'babel-loader'
     },
     {
-      test:/\.less$/,
-      loaders: "style!css!less"
-    }]
+      test: /\.css$/,
+      loader: "style-loader!css-loader"}
+    ]
   }
 };
