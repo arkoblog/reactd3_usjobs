@@ -3,6 +3,8 @@ var ReactDOM = require('react-dom');
 var _ = require('lodash');
 var d3 = require('d3');
 var drawers = require('./components/drawers');
+var Controls = require('./components/Controls');
+
 require("./styles.css");
 
 
@@ -11,10 +13,11 @@ var H1BGraph = React.createClass({
 		this.loadRawData()
 	},
 	getInitialState: function(){
-		return {
-			rawData: []
-		}
-
+		return {rawData: [],
+				dataFilter: function() {return true}};
+	},
+	updateDataFilter: function (filter) {
+		this.setState({dataFilter:filter})
 	},
 	loadRawData: function(){
 		var dateFormat = d3.time.format("%m/%d/%Y");
@@ -63,7 +66,8 @@ var H1BGraph = React.createClass({
 		};
 
 		var fullWidth = 700
-
+		// console.log("DataFilter",this.state.dataFilter);
+		var filteredData = this.state.rawData.filter(this.state.dataFilter);
 
 		return(
 				<div className="row">
@@ -72,11 +76,16 @@ var H1BGraph = React.createClass({
 					</div>		
 					<div className="col-md-12">
 						<svg width={fullWidth} height={params.height}>
-							<drawers.Histogram {...params} data={this.state.rawData}/>
+							<drawers.Histogram {...params} data={filteredData}/>
 
 						</svg>
 					</div>
+				
+				<Controls data = {this.state.rawData} updateDataFilter={this.updateDataFilter}/>
+
 				</div>
+
+				
 			);
 	}
 }); 

@@ -1,9 +1,17 @@
 .histogram .bar rect {
-  fill: navy;
+  fill: steelblue;
   shape-rendering: crispEdges;
 }
-
 .histogram .bar text {
   fill: #fff;
   font: 12px sans-serif;
+}
+.histogram .axis path,
+.histogram .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.histogram .axis text {
+  font: 10px sans-serif;
 }
