@@ -15,7 +15,6 @@ var Toggle = React.createClass({
 	},
 	componentWillReceiveProps: function(newProps) {
 		this.setState({value:newProps.value});
-
 	},
 	render: function() {
 		// console.log(this);
@@ -42,13 +41,13 @@ var ControlRow = React.createClass({
 		return ({toggleValues: toggleValues});
 	},
 	makePick: function(picked, newState){
-		console.log("Picked",picked,"newstate",newState)
+		// console.log("Picked",picked,"newstate",newState)
 		var toggleValues = this.state.toggleValues;
-		console.log("Before", toggleValues)
+		// console.log("Before", toggleValues)
 		toggleValues = _.mapValues(toggleValues, function(value, key){
 			return newState && key==picked;
 		});
-		console.log("After",toggleValues)
+		// console.log("After",toggleValues)
 		this.props.updateDataFilter(picked, !newState);
 		this.setState({toggleValues: toggleValues})
 	},
@@ -70,29 +69,45 @@ var ControlRow = React.createClass({
 })
 
 var Controls = React.createClass({
+	getInitialState: function () {
+		return {yearFilter: function(){return true},
+				stateFilter: function(){return true}};
+	},
 	UpdateYearFilter: function (year, reset) {
 		// console.log("Year", year, "Reset",reset);
-
 		var filter = function(d) {
 			return d.submit_date.getFullYear() == year;
 		};
 
-		if (reset || !year) {
+		if (reset || !year ) {
 			filter = function() {return true;}
 		}
 
+
 		this.setState({yearFilter:filter});
 	},
-	getInitialState: function () {
-		return {yearFilter: function(){return true}};
+	UpdateStateFilter: function (state, reset) {
+		// console.log("Year", state, "Reset",reset);
+		var filter = function(d) {
+			return d.state == state;
+		};
+
+		if (reset || !state) {
+			filter = function() {return true;}
+		}
+
+		this.setState({stateFilter:filter});
 	},
 	componentDidUpdate: function() {
 		this.props.updateDataFilter(
 			(function(filters){
-				// console.log("Filters",filters)
-				return function (d){
+				var yearF =function (d){
 					return filters.yearFilter(d)
 				};
+				var stateF =function (d){
+					return filters.stateFilter(d)
+				};
+				return{yearF:yearF, stateF: stateF}
 			})(this.state)
 			);
 	},
@@ -103,10 +118,15 @@ var Controls = React.createClass({
 		var getYears = function(data) {
 			// console.log("GetYears", _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number))
 			return _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number)
-		}
+		};
+		var getStates = function(data) {
+			// console.log("GetYears", _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number))
+			return _.keys(_.groupBy(data, function(d){return d.state}))
+		};
 		return (
 				<div>
 					<ControlRow data={this.props.data} getToggleNames={getYears} updateDataFilter={this.UpdateYearFilter} />
+					<ControlRow data={this.props.data} getToggleNames={getStates} updateDataFilter={this.UpdateStateFilter} />
 				</div>
 			)
 	}

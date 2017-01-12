@@ -14,10 +14,14 @@ var H1BGraph = React.createClass({
 	},
 	getInitialState: function(){
 		return {rawData: [],
-				dataFilter: function() {return true}};
+				dateFilter: function() {return true},
+				stateFilter: function() {return true}};
 	},
 	updateDataFilter: function (filter) {
-		this.setState({dataFilter:filter})
+		console.log("Filter1",filter);
+		this.setState({dateFilter:filter.yearF,
+						stateFilter:filter.stateF})
+		// console.log("Filer",filter)
 	},
 	loadRawData: function(){
 		var dateFormat = d3.time.format("%m/%d/%Y");
@@ -67,7 +71,9 @@ var H1BGraph = React.createClass({
 
 		var fullWidth = 700
 		// console.log("DataFilter",this.state.dataFilter);
-		var filteredData = this.state.rawData.filter(this.state.dataFilter);
+		var filteredData = this.state.rawData.filter(this.state.dateFilter).filter(this.state.stateFilter);
+
+		console.log(filteredData);
 
 		return(
 				<div className="row">
@@ -81,7 +87,7 @@ var H1BGraph = React.createClass({
 						</svg>
 					</div>
 				
-				<Controls data = {this.state.rawData} updateDataFilter={this.updateDataFilter}/>
+					<Controls data = {this.state.rawData} updateDataFilter={this.updateDataFilter}/>
 
 				</div>
 
