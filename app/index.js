@@ -1,9 +1,10 @@
-var React = require('react');
+var React = require('react'); 
 var ReactDOM = require('react-dom');
 var _ = require('lodash');
 var d3 = require('d3');
 var drawers = require('./components/drawers');
 var Controls = require('./components/Controls');
+var Meta = require('./components/Meta');
 
 require("./styles.css");
 
@@ -58,7 +59,6 @@ var H1BGraph = React.createClass({
 				<h2>Loading data for 81000 h1B Visas in the country!</h2>
 				);
 		}
-
 		var params = {
 			bins: 20,
 			width: 200,
@@ -78,7 +78,9 @@ var H1BGraph = React.createClass({
 		return(
 				<div className="row">
 					<div className="row">
-						<h1>Welcome to the d3 app!</h1>
+						<Meta.Title data={filteredData} /> 
+						<Meta.Description data={filteredData} allData={this.state.rawData} /> 
+
 					</div>		
 					<div className="col-md-12">
 						<svg width={fullWidth} height={params.height}>

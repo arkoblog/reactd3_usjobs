@@ -2,7 +2,7 @@ var React = require ('react');
 var ReactDOM = require ('react-dom');
 var d3 = require ('d3');
 
-var HistogramBar = React.createClass({
+var HistogramBar = React.createClass({ 
 	render: function () {
 		var translate = "translate(" + this.props.x + "," + this.props.y + ")";
 		var label = this.props.percent.toFixed(0)+ "%";
@@ -25,6 +25,10 @@ var HistogramBar = React.createClass({
 })
 
 var Axis = React.createClass({
+	renderAxis: function () {
+		var node = ReactDOM.findDOMNode(this);
+		d3.select(node).call(this.axis)
+	},
 	componentWillMount: function () {
 		this.yScale = d3.scale.linear();
 		this.axis = d3.svg.axis()
@@ -50,10 +54,6 @@ var Axis = React.createClass({
 	},	
 	componentDidUpdate: function () { this.renderAxis();},
 	componentDidMount: function () { this.renderAxis();},
-	renderAxis: function () {
-		var node = ReactDOM.findDOMNode(this);
-		d3.select(node).call(this.axis)
-	},
 	render: function () {
 		var translate = "translate("+(this.props.axisMargin-3)+",0)";
 		return (

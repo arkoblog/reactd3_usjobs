@@ -68,6 +68,7 @@ var ControlRow = React.createClass({
 	}
 })
 
+
 var Controls = React.createClass({
 	getInitialState: function () {
 		return {yearFilter: function(){return true},
@@ -82,8 +83,6 @@ var Controls = React.createClass({
 		if (reset || !year ) {
 			filter = function() {return true;}
 		}
-
-
 		this.setState({yearFilter:filter});
 	},
 	UpdateStateFilter: function (state, reset) {
@@ -91,12 +90,15 @@ var Controls = React.createClass({
 		var filter = function(d) {
 			return d.state == state;
 		};
-
+ 
 		if (reset || !state) {
 			filter = function() {return true;}
 		}
 
 		this.setState({stateFilter:filter});
+	},
+	shouldComponentUpdate: function(nextProps, nextState){
+		return !_.isEqual(this.state, nextState);
 	},
 	componentDidUpdate: function() {
 		this.props.updateDataFilter(
@@ -111,25 +113,20 @@ var Controls = React.createClass({
 			})(this.state)
 			);
 	},
-	shouldComponentUpdate: function(nextProps, nextState){
-		return !_.isEqual(this.state, nextState);
-	},
 	render: function() {
 		var getYears = function(data) {
-			// console.log("GetYears", _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number))
 			return _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number)
 		};
 		var getStates = function(data) {
-			// console.log("GetYears", _.keys(_.groupBy(data, function(d){return d.submit_date.getFullYear()})).map(Number))
 			return _.keys(_.groupBy(data, function(d){return d.state}))
 		};
 		return (
 				<div>
 					<ControlRow data={this.props.data} getToggleNames={getYears} updateDataFilter={this.UpdateYearFilter} />
-					<ControlRow data={this.props.data} getToggleNames={getStates} updateDataFilter={this.UpdateStateFilter} />
+					{/* <ControlRow data={this.props.data} getToggleNames={getStates} updateDataFilter={this.UpdateStateFilter} /> */}
 				</div>
 			)
 	}
-})
+});
 
 module.exports = Controls
